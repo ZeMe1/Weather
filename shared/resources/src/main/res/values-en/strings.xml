@@ -1,0 +1,39 @@
+<resources>
+    <string name="max">Max</string>
+    <string name="min">Min</string>
+
+    <string name="now">Now</string>
+    <string name="today">Today</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
+
+    <string name="forecast">Forecast</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="average">Average</string>
+    <string name="feels_like">Feels like</string>
+    <string name="wind">Wind</string>
+    <string name="wind_gusts">Wind gusts</string>
+    <string name="humidity">Humidity</string>
+    <string name="direction">Direction</string>
+    <string name="pressure">Pressure</string>
+    <string name="uv_index">UV index</string>
+
+    <string name="current_location">Current location</string>
+    <string name="change_list">Edit list</string>
+    <string name="notification">Notifications</string>
+    <string name="degree_celsius">°C</string>
+    <string name="degree_fahrenheit">°F</string>
+    <string name="units">Units</string>
+
+    <string name="high">High</string>
+    <string name="low">Low</string>
+
+    <string name="meteo_map_data_detailed">Learn more about meteorological and map data</string>
+    <string name="warn_about_problem">Report a problem</string>
+</resources>

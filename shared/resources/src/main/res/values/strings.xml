@@ -1,0 +1,39 @@
+<resources>
+    <string name="max">Макс</string>
+    <string name="min">Мин</string>
+
+    <string name="now">Сейчас</string>
+    <string name="today">Сегодня</string>
+    <string name="monday_short">Пн</string>
+    <string name="tuesday_short">Вт</string>
+    <string name="wednesday_short">Ср</string>
+    <string name="thursday_short">Чт</string>
+    <string name="friday_short">Пт</string>
+    <string name="saturday_short">Сб</string>
+    <string name="sunday_short">Вс</string>
+
+    <string name="forecast">Прогноз</string>
+    <string name="sunrise">Восход</string>
+    <string name="sunset">Закат</string>
+    <string name="average">В среднем</string>
+    <string name="feels_like">Ощущается как</string>
+    <string name="wind">Ветер</string>
+    <string name="wind_gusts">Порывы ветра</string>
+    <string name="humidity">Влажность</string>
+    <string name="direction">Направление</string>
+    <string name="pressure">Давление</string>
+    <string name="uv_index">Уф-индекс</string>
+
+    <string name="current_location">Текущее место</string>
+    <string name="change_list">Изменить список</string>
+    <string name="notification">Уведомления</string>
+    <string name="degree_celsius">°C</string>
+    <string name="degree_fahrenheit">°F</string>
+    <string name="units">Единицы измерения</string>
+
+    <string name="high">Высокий</string>
+    <string name="low">Низкий</string>
+
+    <string name="meteo_map_data_detailed">Подробнее о метеорологических и картографических данных</string>
+    <string name="warn_about_problem">Сообщить о проблеме</string>
+</resources>

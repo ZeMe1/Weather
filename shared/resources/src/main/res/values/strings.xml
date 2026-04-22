@@ -14,15 +14,18 @@
 
     <string name="forecast">Прогноз</string>
     <string name="sunrise">Восход</string>
+    <string name="sunrise_at">Восход в</string>
     <string name="sunset">Закат</string>
     <string name="average">В среднем</string>
     <string name="feels_like">Ощущается как</string>
     <string name="wind">Ветер</string>
     <string name="wind_gusts">Порывы ветра</string>
     <string name="humidity">Влажность</string>
+    <string name="dew_point_now">Точка росы сейчас </string>
     <string name="direction">Направление</string>
     <string name="pressure">Давление</string>
     <string name="uv_index">Уф-индекс</string>
+    <string name="hpa">гПа</string>
 
     <string name="current_location">Текущее место</string>
     <string name="change_list">Изменить список</string>
@@ -30,10 +33,48 @@
     <string name="degree_celsius">°C</string>
     <string name="degree_fahrenheit">°F</string>
     <string name="units">Единицы измерения</string>
-
-    <string name="high">Высокий</string>
+    <string name="km_per_hour">км/ч</string>
+    
+    <string name="wind_direction_n">С</string>
+    <string name="wind_direction_ne">СВ</string>
+    <string name="wind_direction_e">В</string>
+    <string name="wind_direction_se">ЮВ</string>
+    <string name="wind_direction_s">Ю</string>
+    <string name="wind_direction_sw">ЮЗ</string>
+    <string name="wind_direction_w">З</string>
+    <string name="wind_direction_nw">СЗ</string>
+    
     <string name="low">Низкий</string>
+    <string name="mid">Средний</string>
+    <string name="high">Высокий</string>
+    <string name="very_high">Очень высокий</string>
+    <string name="extreme">Экстремально высокий</string>
 
+    <string name="uv_desc_low">Низкий уровень опасности.</string>
+    <string name="uv_desc_mid">Используйте солнцезащитный крем.</string>
+    <string name="uv_desc_high">Необходима защита от солнца.</string>
+    <string name="uv_desc_very_high">Старайтесь не находиться на солнце.</string>
+    <string name="uv_desc_extreme">Не выходите на солнце</string>
+
+    <string name="forecast_for_eight_days">Прогноз на 8 дней</string>
     <string name="meteo_map_data_detailed">Подробнее о метеорологических и картографических данных</string>
     <string name="warn_about_problem">Сообщить о проблеме</string>
+    <string name="on_for">На</string>
+
+    <string name="below_avg_max">&lt;ниже среднесуточного максимума</string>
+    <string name="more_daily_max">&gt;среднесуточного максимума</string>
+    <string name="equal_avg_max">=Соответствует среднесуточному максимуму</string>
+
+    <string name="feels_like_warmer">По ощущениям теплее, чем на самом деле.</string>
+    <string name="feels_like_colder">По ощущениям холоднее, чем на самом деле.</string>
+    <string name="feels_like_same">По ощущениям так же, как на самом деле.</string>
+
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="request_timeout">Превышено время ожидания</string>
+    <string name="no_internet">Нет подключения к интернету</string>
+    <string name="gps_disabled">GPS выключен</string>
+    <string name="permission_denied">Доступ запрещен</string>
+    <string name="location_unavailable">Местоположение недоступно</string>
+    
+    <string name="hardcode_work">Работа</string>
 </resources>

@@ -1,6 +1,7 @@
 package kz.zeme.weather.di
 
 import android.app.Application
+import kz.zeme.weather.di.modules.databaseModule
 import kz.zeme.weather.di.modules.mapperModule
 import kz.zeme.weather.di.modules.networkModule
 import kz.zeme.weather.di.modules.repositoryModule
@@ -20,7 +21,8 @@ class WeatherApp: Application() {
                 useCaseModule,
                 viewModelModule,
                 repositoryModule,
-                mapperModule
+                mapperModule,
+                databaseModule
             )
         }
     }

@@ -6,4 +6,5 @@ object SymbolConstants {
     const val COMMA = ","
     const val DOUBLE_DOT = ":"
     const val DEGREE = "°"
+    const val PERCENTAGE = "%"
 }

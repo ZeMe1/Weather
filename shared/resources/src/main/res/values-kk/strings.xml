@@ -14,15 +14,18 @@
 
     <string name="forecast">Болжам</string>
     <string name="sunrise">Күннің шығуы</string>
+    <string name="sunrise_at">Күннің шығуы</string>
     <string name="sunset">Күннің батуы</string>
     <string name="average">Орташа</string>
     <string name="feels_like">Сезіледі</string>
     <string name="wind">Жел</string>
     <string name="wind_gusts">Жел екпіні</string>
     <string name="humidity">Ылғалдылық</string>
+    <string name="dew_point_now">Шық нүктесі қазір </string>
     <string name="direction">Бағыты</string>
     <string name="pressure">Қысым</string>
     <string name="uv_index">УК-индекс</string>
+    <string name="hpa">гПа</string>
 
     <string name="current_location">Ағымдағы орын</string>
     <string name="change_list">Тізімді өзгерту</string>
@@ -30,10 +33,48 @@
     <string name="degree_celsius">°C</string>
     <string name="degree_fahrenheit">°F</string>
     <string name="units">Өлшем бірліктері</string>
+    <string name="km_per_hour">км/сағ</string>
 
-    <string name="high">Жоғары</string>
+    <string name="wind_direction_n">С</string>
+    <string name="wind_direction_ne">СШ</string>
+    <string name="wind_direction_e">Ш</string>
+    <string name="wind_direction_se">ОШ</string>
+    <string name="wind_direction_s">О</string>
+    <string name="wind_direction_sw">ОБ</string>
+    <string name="wind_direction_w">Б</string>
+    <string name="wind_direction_nw">СБ</string>
+
     <string name="low">Төмен</string>
+    <string name="mid">Орташа</string>
+    <string name="high">Жоғары</string>
+    <string name="very_high">Өте жоғары</string>
+    <string name="extreme">Экстремалды жоғары</string>
 
+    <string name="uv_desc_low">Қауіп деңгейі төмен.</string>
+    <string name="uv_desc_mid">Күннен қорғайтын кремді пайдаланыңыз.</string>
+    <string name="uv_desc_high">Күннен қорғану қажет.</string>
+    <string name="uv_desc_very_high">Күн астында болмауға тырысыңыз.</string>
+    <string name="uv_desc_extreme">Күнге шықпаңыз</string>
+
+    <string name="forecast_for_eight_days">8 күндік болжам</string>
     <string name="meteo_map_data_detailed">Метеорологиялық және карта деректері туралы толығырақ</string>
     <string name="warn_about_problem">Мәселе туралы хабарлау</string>
+    <string name="on_for">-ға / -ге</string>
+
+    <string name="below_avg_max">&lt;орташа тәуліктік максимумнан төмен</string>
+    <string name="more_daily_max">&gt;орташа тәуліктік максимумнан жоғары</string>
+    <string name="equal_avg_max">=Орташа тәуліктік максимумға сәйкес</string>
+
+    <string name="feels_like_warmer">Нақты температурадан жылырақ сезіледі.</string>
+    <string name="feels_like_colder">Нақты температурадан суығырақ сезіледі.</string>
+    <string name="feels_like_same">Нақты температурамен бірдей сезіледі.</string>
+
+    <string name="something_went_wrong">Бірдеңе дұрыс болмады</string>
+    <string name="request_timeout">Күту уақыты аяқталды</string>
+    <string name="no_internet">Интернет қосылымы жоқ</string>
+    <string name="gps_disabled">GPS өшірулі</string>
+    <string name="permission_denied">Рұқсат берілмеді</string>
+    <string name="location_unavailable">Орналасқан жер қолжетімсіз</string>
+
+    <string name="hardcode_work">Жұмыс</string>
 </resources>

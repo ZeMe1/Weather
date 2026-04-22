@@ -13,10 +13,14 @@ fun WeatherTheme(
 ) {
     val typography = defaultWeatherTypography()
     val colors = if (isSystemInDarkTheme()) DarkColors else LightColors
+    val shapes = defaultWeatherShapes
+    val dimensions = defaultWeatherDimensions
 
     WeatherThemeImpl(
         typography = typography,
         colors = colors,
+        shapes = shapes,
+        dimensions = dimensions,
         content = content
     )
 }
@@ -25,6 +29,8 @@ fun WeatherTheme(
 fun WeatherThemeImpl(
     typography: WeatherTypography,
     colors: WeatherColor,
+    dimensions: Dimensions,
+    shapes: WeatherShapes,
     content: @Composable () -> Unit
 ) {
     val colors = remember {
@@ -33,7 +39,9 @@ fun WeatherThemeImpl(
 
     CompositionLocalProvider(
         LocalColors provides colors,
-        LocalWeatherTypography provides typography
+        LocalWeatherTypography provides typography,
+        LocalWeatherShapes provides shapes,
+        LocalSpacing provides dimensions
     ) {
         ProvideTextStyle(value = typography.weight500Size15LineHeight21, content = content)
     }

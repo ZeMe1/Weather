@@ -7,13 +7,29 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class Dimensions(
-    val smallPadding: Dp = 8.dp,
-    val mediumPadding: Dp = 16.dp,
-    val largePadding: Dp = 24.dp,
-    val extraLargePadding: Dp = 32.dp,
+    val extraSmallPadding: Dp,
+    val smallPadding: Dp,
+    val smallMediumPadding: Dp,
+    val mediumPadding: Dp,
+    val mediumLargePadding: Dp,
+    val largePadding: Dp,
+    val extraLargePadding: Dp,
 
-    val horizontalScreenPadding: Dp = 16.dp,
-    val verticalScreenPadding: Dp = 16.dp
+    val horizontalScreenPadding: Dp,
+    val verticalScreenPadding: Dp
 )
 
-val LocalSpacing = staticCompositionLocalOf { Dimensions() }
+val defaultWeatherDimensions = Dimensions(
+    extraSmallPadding = 4.dp,
+    smallPadding = 8.dp,
+    smallMediumPadding = 12.dp,
+    mediumPadding = 16.dp,
+    mediumLargePadding = 20.dp,
+    largePadding = 24.dp,
+    extraLargePadding = 32.dp,
+
+    horizontalScreenPadding = 16.dp,
+    verticalScreenPadding = 16.dp
+)
+
+val LocalSpacing = staticCompositionLocalOf { defaultWeatherDimensions }

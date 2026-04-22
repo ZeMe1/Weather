@@ -25,5 +25,4 @@ dependencyResolutionManagement {
 rootProject.name = "Weather"
 include(":app")
 include(":shared")
-include(":shared:core")
 include(":shared:resources")

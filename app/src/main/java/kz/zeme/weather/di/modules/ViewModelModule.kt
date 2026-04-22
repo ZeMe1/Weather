@@ -1,9 +1,9 @@
 package kz.zeme.weather.di.modules
 
-import kz.zeme.weather.presentation.main.MainViewModel
+import kz.zeme.weather.presentation.home.HomeViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { MainViewModel(getWeatherUseCase = get()) }
+    viewModel { HomeViewModel(getWeatherUseCase = get()) }
 }

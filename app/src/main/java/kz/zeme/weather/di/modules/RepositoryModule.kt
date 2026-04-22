@@ -12,5 +12,5 @@ val repositoryModule = module {
     single { LocationServices.getFusedLocationProviderClient(androidApplication()) }
     single<LocationService> { DefaultLocationProvider(fusedLocationProviderClient = get(), application = androidApplication()) }
 
-    single<WeatherRepository> { WeatherRepositoryImpl(api = get(), mapper = get()) }
+    single<WeatherRepository> { WeatherRepositoryImpl(api = get(), dao = get(), locationService = get(), weatherMapper = get(), hourlyMapper = get(), dailyMapper = get(), historyWeatherMapper = get(), weatherMapperLocal = get()) }
 }

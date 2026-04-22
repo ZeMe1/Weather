@@ -14,15 +14,18 @@
 
     <string name="forecast">Forecast</string>
     <string name="sunrise">Sunrise</string>
+    <string name="sunrise_at">Sunrise at</string>
     <string name="sunset">Sunset</string>
     <string name="average">Average</string>
     <string name="feels_like">Feels like</string>
     <string name="wind">Wind</string>
     <string name="wind_gusts">Wind gusts</string>
     <string name="humidity">Humidity</string>
+    <string name="dew_point_now">Dew point now </string>
     <string name="direction">Direction</string>
     <string name="pressure">Pressure</string>
     <string name="uv_index">UV index</string>
+    <string name="hpa">hPa</string>
 
     <string name="current_location">Current location</string>
     <string name="change_list">Edit list</string>
@@ -30,10 +33,49 @@
     <string name="degree_celsius">°C</string>
     <string name="degree_fahrenheit">°F</string>
     <string name="units">Units</string>
+    <string name="km_per_hour">km/h</string>
 
-    <string name="high">High</string>
+    <string name="wind_direction_n">N</string>
+    <string name="wind_direction_ne">NE</string>
+    <string name="wind_direction_e">E</string>
+    <string name="wind_direction_se">SE</string>
+    <string name="wind_direction_s">S</string>
+    <string name="wind_direction_sw">SW</string>
+    <string name="wind_direction_w">W</string>
+    <string name="wind_direction_nw">NW</string>
+
     <string name="low">Low</string>
+    <string name="mid">Moderate</string>
+    <string name="high">High</string>
+    <string name="very_high">Very high</string>
+    <string name="extreme">Extreme</string>
 
+    <string name="uv_desc_low">Low danger level.</string>
+    <string name="uv_desc_mid">Use sunscreen.</string>
+    <string name="uv_desc_high">Sun protection is required.</string>
+    <string name="uv_desc_very_high">Try to stay out of the sun.</string>
+    <string name="uv_desc_extreme">Avoid sun exposure</string>
+
+    <string name="forecast_for_eight_days">8-day forecast</string>
     <string name="meteo_map_data_detailed">Learn more about meteorological and map data</string>
     <string name="warn_about_problem">Report a problem</string>
+    <string name="on_for">For</string>
+
+    <string name="below_avg_max">&lt;below average daily maximum</string>
+    <string name="more_daily_max">&gt;average daily maximum</string>
+    <string name="equal_avg_max">=Matches average daily maximum</string>
+
+    <string name="feels_like_warmer">Feels warmer than the actual temperature.</string>
+    <string name="feels_like_colder">Feels colder than the actual temperature.</string>
+    <string name="feels_like_same">Feels the same as the actual temperature.</string>
+
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="request_timeout">Request timeout</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="gps_disabled">GPS is disabled</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="location_unavailable">Location unavailable</string>
+
+
+    <string name="hardcode_work">Job</string>
 </resources>

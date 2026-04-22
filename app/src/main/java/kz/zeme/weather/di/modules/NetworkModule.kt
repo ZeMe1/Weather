@@ -8,7 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 val networkModule = module {
     single {
@@ -21,6 +22,8 @@ val networkModule = module {
             val originalUrl = originalRequest.url
             val url = originalUrl.newBuilder()
                 .addQueryParameter("appid", BuildConfig.WEATHER_API_KEY)
+                .addQueryParameter("units", "metric")
+                .addQueryParameter("lang", Locale.getDefault().toLanguageTag())
                 .build()
             val requestBuilder = originalRequest.newBuilder().url(url)
             chain.proceed(requestBuilder.build())
@@ -29,6 +32,8 @@ val networkModule = module {
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(apiKeyInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 

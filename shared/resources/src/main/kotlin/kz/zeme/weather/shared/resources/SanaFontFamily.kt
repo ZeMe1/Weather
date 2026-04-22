@@ -24,7 +24,10 @@ private fun weatherFontFamily(): FontFamily = FontFamily(
 data class WeatherTypography(
     val weight100Size92LineHeight83: TextStyle,
     val weight300Size48LineHeight48: TextStyle,
+    val weight400Size14LineHeight20: TextStyle,
+    val weight400Size15LineHeight18: TextStyle,
     val weight500Size10LineHeight10: TextStyle,
+    val weight500Size12LineHeight12: TextStyle,
     val weight500Size15LineHeight21: TextStyle,
     val weight500Size18LineHeight21: TextStyle,
     val weight500Size20LineHeight20: TextStyle,
@@ -48,37 +51,62 @@ fun defaultWeatherTypography(): WeatherTypography {
             fontWeight = FontWeight.W300,
             fontSize = 48.sp,
             lineHeight = 48.sp
-        ), weight500Size10LineHeight10 = TextStyle(
+        ),
+        weight400Size14LineHeight20 = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.W400,
+            fontSize = 14.sp,
+            lineHeight = 20.sp
+        ),
+        weight400Size15LineHeight18 = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.W400,
+            fontSize = 15.sp,
+            lineHeight = 18.sp
+        ),
+        weight500Size10LineHeight10 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W500,
             fontSize = 10.sp,
             lineHeight = 10.sp
-        ), weight500Size15LineHeight21 = TextStyle(
+        ),
+        weight500Size12LineHeight12 = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.W500,
+            fontSize = 12.sp,
+            lineHeight = 12.sp
+        ),
+        weight500Size15LineHeight21 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W500,
             fontSize = 15.sp,
             lineHeight = 21.sp
-        ), weight500Size18LineHeight21 = TextStyle(
+        ),
+        weight500Size18LineHeight21 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W500,
             fontSize = 18.sp,
             lineHeight = 21.sp
-        ), weight500Size20LineHeight20 = TextStyle(
+        ),
+        weight500Size20LineHeight20 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W500,
             fontSize = 20.sp,
             lineHeight = 20.sp
-        ), weight500Size32LineHeight32 = TextStyle(
+        ),
+        weight500Size32LineHeight32 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W500,
             fontSize = 32.sp,
             lineHeight = 32.sp
-        ), weight700Size10LineHeight10 = TextStyle(
+        ),
+        weight700Size10LineHeight10 = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W700,
             fontSize = 10.sp,
             lineHeight = 10.sp
-        ), weight700Size32LineHeight32 =TextStyle(
+        ),
+        weight700Size32LineHeight32 =TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.W700,
             fontSize = 32.sp,

@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -79,7 +80,16 @@ dependencies {
 
     // Location
     implementation(libs.play.services.location)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Gson
+    implementation(libs.gson)
 
     implementation(project(":shared:resources"))
-    implementation(project(":shared:core"))
 }

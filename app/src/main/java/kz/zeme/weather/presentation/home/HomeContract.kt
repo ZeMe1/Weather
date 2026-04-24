@@ -29,19 +29,13 @@ data class HomeState(
             ?.drawableRes
             ?: R.drawable.ic_bg_after6
 
-    val uvLevelLabel: Int
-        get() = weatherData?.uvIndex?.roundToInt()?.toUvLevelLabel() ?: R.string.low
+    val uvLevelLabel: Int = weatherData?.uvIndex?.roundToInt()?.toUvLevelLabel() ?: R.string.low
 
-    val uvDescriptionLabel: Int
-        get() = weatherData?.uvIndex?.roundToInt()?.toUvDescription() ?: R.string.uv_desc_low
+    val uvDescriptionLabel: Int = weatherData?.uvIndex?.roundToInt()?.toUvDescription() ?: R.string.uv_desc_low
 
-    val feelsLikeDescription: Int
-        get() = weatherData?.let {
-            buildFeelsLikeDescription(it.currentTemp, it.feelsLikeTemp)
-        } ?: R.string.feels_like_warmer
+    val feelsLikeDescription: Int = weatherData?.let { buildFeelsLikeDescription(it.currentTemp, it.feelsLikeTemp) } ?: R.string.feels_like_warmer
 
-    val windDirectionLabel: Int
-        get() = weatherData?.windDirectionDegrees?.toWindDirectionLabel() ?: R.string.wind_direction_ne
+    val windDirectionLabel: Int = weatherData?.windDirectionDegrees?.toWindDirectionLabel() ?: R.string.wind_direction_ne
 
 
 }
@@ -55,10 +49,8 @@ sealed interface HomeAction {
 }
 
 sealed interface HomeMsg {
-    data class WeatherDataLoaded(val weather: Weather) : HomeMsg
+    data class WeatherDataLoaded(val weather: Weather, val hourlyForecastItems: List<HourlyForecastUiItem>, val dailyForecastItems: List<DailyForecastUiItem>) : HomeMsg
     data class HistoricalAverageTempLoaded(val temp: Int) : HomeMsg
-    data class HourlyForecastItemsLoaded(val hourlyForecastItems: List<HourlyForecastUiItem>) : HomeMsg
-    data class DailyForecastItemsLoaded(val dailyForecastItems: List<DailyForecastUiItem>) : HomeMsg
     data class Loading(val isLoading: Boolean) : HomeMsg
     data class Refreshing(val isRefreshing: Boolean) : HomeMsg
 }

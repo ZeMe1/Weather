@@ -91,5 +91,8 @@ dependencies {
     // Gson
     implementation(libs.gson)
 
+    // Preference
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(project(":shared:resources"))
 }

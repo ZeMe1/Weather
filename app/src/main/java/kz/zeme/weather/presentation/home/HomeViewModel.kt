@@ -1,6 +1,7 @@
 package kz.zeme.weather.presentation.home
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -36,27 +37,19 @@ class HomeViewModel(
     override val middleware: HomeMiddlewareType = HomeMiddleware()
     override val reducer: Reducer<State<HomeState>, HomeMsg> = HomeReducer()
 
-    private val _states = MutableStateFlow<State<HomeState>>(Success(HomeState(isLoading = true)))
+    private val _states = MutableStateFlow<State<HomeState>>(Success(HomeState()))
     override val states: StateFlow<State<HomeState>> = _states
 
     private inner class HomeReducer : Reducer<State<HomeState>, HomeMsg> {
         override fun reduce(state: State<HomeState>, message: HomeMsg): State<HomeState> =
             when (message) {
                 is HomeMsg.WeatherDataLoaded -> generateOrElse<State<HomeState>, Success<HomeState>>(
-                    fallback = { Success(HomeState(weatherData = message.weather)) },
-                    block = { copy(data = data.copy(weatherData = message.weather)) }
+                    fallback = { Success(HomeState(weatherData = message.weather, listOfDailyForecastItems = message.dailyForecastItems, listOfHourlyForecastItems = message.hourlyForecastItems, isLoading = false, isRefreshing = false)) },
+                    block = { copy(data = data.copy(weatherData = message.weather, listOfDailyForecastItems = message.dailyForecastItems, listOfHourlyForecastItems = message.hourlyForecastItems, isLoading = false, isRefreshing = false)) }
                 )
                 is HomeMsg.HistoricalAverageTempLoaded -> generateOrElse<State<HomeState>, Success<HomeState>>(
                     fallback = { Success(HomeState(historicalAverageTemp = message.temp)) },
                     block = { copy(data = data.copy(historicalAverageTemp = message.temp)) }
-                )
-                is HomeMsg.HourlyForecastItemsLoaded -> generateOrElse<State<HomeState>, Success<HomeState>>(
-                    fallback = { Success(HomeState(listOfHourlyForecastItems = message.hourlyForecastItems)) },
-                    block = { copy(data = data.copy(listOfHourlyForecastItems = message.hourlyForecastItems)) }
-                )
-                is HomeMsg.DailyForecastItemsLoaded -> generateOrElse<State<HomeState>, Success<HomeState>>(
-                    fallback = { Success(HomeState(listOfDailyForecastItems = message.dailyForecastItems)) },
-                    block = { copy(data = data.copy(listOfDailyForecastItems = message.dailyForecastItems)) }
                 )
                 is HomeMsg.Loading -> generateOrElse<State<HomeState>, Success<HomeState>>(
                     fallback = { Success(HomeState(isLoading = message.isLoading)) },
@@ -69,8 +62,7 @@ class HomeViewModel(
             }
     }
 
-    private inner class HomeMiddleware :
-        HomeMiddlewareType(state = { state }, scope = viewModelScope) {
+    private inner class HomeMiddleware : HomeMiddlewareType(state = { state }, scope = viewModelScope) {
         override fun handleIntent(intent: HomeIntent, state: () -> State<HomeState>) {
             when (intent) {
                 HomeIntent.RefreshWeather -> observeWeatherData(isRefresh = true)
@@ -84,7 +76,7 @@ class HomeViewModel(
         }
 
         private fun observeWeatherData(isRefresh: Boolean = false) {
-            scope.launch {
+            scope.launch(Dispatchers.IO) {
                 if (isRefresh) dispatch(HomeMsg.Refreshing(true))
 
                 getWeatherUseCase().collect { result ->
@@ -93,11 +85,16 @@ class HomeViewModel(
                             val hasData = state.getOrNull()?.weatherData != null
                             if (!hasData && !isRefresh) dispatch(HomeMsg.Loading(true))
 
-                            loadHourlyUiItems(weatherData)
-                            loadDailyUiItems(weatherData)
-                            dispatch(HomeMsg.WeatherDataLoaded(weatherData))
-                            dispatch(HomeMsg.Loading(false))
-                            if (isRefresh) dispatch(HomeMsg.Refreshing(false))
+                            val hourlyItems = createHourlyUiItems(weatherData)
+                            val dailyItems = createDailyUiItems(weatherData)
+
+                            dispatch(
+                                HomeMsg.WeatherDataLoaded(
+                                    weather = weatherData,
+                                    hourlyForecastItems = hourlyItems,
+                                    dailyForecastItems = dailyItems
+                                )
+                            )
                         }
                         .onFailure { error ->
                             publish(HomeLabel.ShowError(error.toErrorLabel()))
@@ -108,49 +105,50 @@ class HomeViewModel(
             }
         }
 
-        private fun loadHourlyUiItems(weather: Weather) {
+        private fun createHourlyUiItems(weather: Weather): List<HourlyForecastUiItem> {
             val timezone = weather.timezone
             val now = Clock.System.now()
             val windowEnd = weather.hourlyForecast.lastOrNull()?.time ?: now
 
-            val hourlyForecastItems: List<Pair<Instant, HourlyForecastUiItem>> =
-                weather.hourlyForecast.mapIndexed { index, forecast ->
-                    val label =
-                        if (index == 0) UiText.Resource(R.string.now) else UiText.DynamicString(
-                            forecast.time.toHourLabel(timezone)
-                        )
-
-                    forecast.time to HourlyForecastUiItem.Forecast(
-                        label = label,
-                        iconCode = forecast.iconCode,
-                        temp = forecast.temp
-                    )
+            val hourlyForecastItems = weather.hourlyForecast.mapIndexed { index, forecast ->
+                val label = if (index == 0) {
+                    UiText.Resource(R.string.now)
+                } else {
+                    UiText.DynamicString(forecast.time.toHourLabel(timezone))
                 }
 
-            val sunEvents: List<Pair<Instant, HourlyForecastUiItem.SunEvent>> =
-                weather.dailyForecast.flatMap { daily ->
-                    listOf(
-                        daily.sunrise to HourlyForecastUiItem.SunEvent(
-                            timeLabel = UiText.DynamicString(daily.sunrise.toHourMinuteLabel(timezone)),
-                            isSunrise = true
-                        ),
-                        daily.sunset to HourlyForecastUiItem.SunEvent(
-                            timeLabel = UiText.DynamicString(daily.sunset.toHourMinuteLabel(timezone)),
-                            isSunrise = false
-                        )
-                    )
-                }.filter { (time, _) -> time in (now..windowEnd) }
+                forecast.time to HourlyForecastUiItem.Forecast(
+                    label = label,
+                    iconCode = forecast.iconCode,
+                    temp = forecast.temp
+                )
+            }
 
-            val listOfHourlyForecastItems = (hourlyForecastItems + sunEvents)
+            val sunEvents = weather.dailyForecast.flatMap { daily ->
+                listOf(
+                    daily.sunrise to HourlyForecastUiItem.SunEvent(
+                        timeLabel = UiText.DynamicString(daily.sunrise.toHourMinuteLabel(timezone)),
+                        isSunrise = true
+                    ),
+                    daily.sunset to HourlyForecastUiItem.SunEvent(
+                        timeLabel = UiText.DynamicString(daily.sunset.toHourMinuteLabel(timezone)),
+                        isSunrise = false
+                    )
+                )
+            }.filter { (time, _) -> time in (now..windowEnd) }
+
+            return (hourlyForecastItems + sunEvents)
                 .sortedBy { (time, _) -> time }
                 .map { (_, item) -> item }
-
-            dispatch(HomeMsg.HourlyForecastItemsLoaded(listOfHourlyForecastItems))
         }
 
-        private fun loadDailyUiItems(weather: Weather) {
-            val dailyForecastItems = weather.dailyForecast.mapIndexed { index, forecast ->
-                val dayLabel = if (index == 0) UiText.Resource(R.string.today) else UiText.DynamicString(forecast.time.toDayLabel(weather.timezone))
+        private fun createDailyUiItems(weather: Weather): List<DailyForecastUiItem> {
+            return weather.dailyForecast.mapIndexed { index, forecast ->
+                val dayLabel = if (index == 0) {
+                    UiText.Resource(R.string.today)
+                } else {
+                    UiText.DynamicString(forecast.time.toDayLabel(weather.timezone))
+                }
 
                 DailyForecastUiItem(
                     dayLabel = dayLabel,
@@ -160,7 +158,6 @@ class HomeViewModel(
                     summary = forecast.summary
                 )
             }
-            dispatch(HomeMsg.DailyForecastItemsLoaded(dailyForecastItems))
         }
     }
 

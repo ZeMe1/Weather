@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -71,6 +72,7 @@ dependencies {
 
     // Navigation
     implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // Network
     implementation(libs.retrofit)
@@ -93,6 +95,9 @@ dependencies {
 
     // Preference
     implementation(libs.androidx.datastore.preferences)
+
+    // Coil
+    implementation(libs.coil.compose)
 
     implementation(project(":shared:resources"))
 }

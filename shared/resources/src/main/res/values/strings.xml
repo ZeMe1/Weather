@@ -27,6 +27,7 @@
     <string name="uv_index">Уф-индекс</string>
     <string name="hpa">гПа</string>
 
+    <string name="weather">Погода</string>
     <string name="current_location">Текущее место</string>
     <string name="change_list">Изменить список</string>
     <string name="notification">Уведомления</string>
@@ -59,7 +60,10 @@
     <string name="forecast_for_eight_days">Прогноз на 8 дней</string>
     <string name="meteo_map_data_detailed">Подробнее о метеорологических и картографических данных</string>
     <string name="warn_about_problem">Сообщить о проблеме</string>
+    <string name="celsius">Градусы Цельсия</string>
+    <string name="fahrenheit">Градусы Фаренгейта</string>
     <string name="on_for">На</string>
+    <string name="search_city_airport">Поиск города или аэропорта</string>
 
     <string name="below_avg_max">&lt;ниже среднесуточного максимума</string>
     <string name="more_daily_max">&gt;среднесуточного максимума</string>

@@ -7,6 +7,9 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class Dimensions(
+    val borderWidth: Dp,
+    val blurRadius: Dp,
+
     val extraSmallPadding: Dp,
     val smallPadding: Dp,
     val smallMediumPadding: Dp,
@@ -20,6 +23,9 @@ data class Dimensions(
 )
 
 val defaultWeatherDimensions = Dimensions(
+    borderWidth = 1.dp,
+    blurRadius = 4.dp,
+
     extraSmallPadding = 4.dp,
     smallPadding = 8.dp,
     smallMediumPadding = 12.dp,

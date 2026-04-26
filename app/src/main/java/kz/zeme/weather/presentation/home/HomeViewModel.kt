@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kz.zeme.weather.core.architecture.BaseViewModel
 import kz.zeme.weather.core.architecture.Bootstrapper
 import kz.zeme.weather.core.architecture.CoroutineBootstrapper
@@ -41,8 +40,7 @@ class HomeViewModel(
     override val states: StateFlow<State<HomeState>> = _states
 
     private inner class HomeReducer : Reducer<State<HomeState>, HomeMsg> {
-        override fun reduce(state: State<HomeState>, message: HomeMsg): State<HomeState> =
-            when (message) {
+        override fun reduce(state: State<HomeState>, message: HomeMsg): State<HomeState> = when (message) {
                 is HomeMsg.WeatherDataLoaded -> generateOrElse<State<HomeState>, Success<HomeState>>(
                     fallback = { Success(HomeState(weatherData = message.weather, listOfDailyForecastItems = message.dailyForecastItems, listOfHourlyForecastItems = message.hourlyForecastItems, isLoading = false, isRefreshing = false)) },
                     block = { copy(data = data.copy(weatherData = message.weather, listOfDailyForecastItems = message.dailyForecastItems, listOfHourlyForecastItems = message.hourlyForecastItems, isLoading = false, isRefreshing = false)) }

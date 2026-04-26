@@ -1,9 +1,8 @@
 package kz.zeme.weather.di.modules
 
-import android.net.Network
 import com.google.android.gms.location.LocationServices
-import kz.zeme.weather.data.service.location.DefaultLocationProvider
 import kz.zeme.weather.data.repository.WeatherRepositoryImpl
+import kz.zeme.weather.data.service.location.DefaultLocationProvider
 import kz.zeme.weather.data.service.network.DefaultNetworkChecker
 import kz.zeme.weather.domain.repository.WeatherRepository
 import kz.zeme.weather.domain.service.LocationService

@@ -27,14 +27,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.collectLatest
 import kz.zeme.weather.core.architecture.LaunchedEffectLifecycle
 import kz.zeme.weather.core.architecture.State.Success
 import kz.zeme.weather.core.commonComponents.commonWidgets.LoadingScreen
 import kz.zeme.weather.core.extensions.toHourMinuteLabel
+import kz.zeme.weather.core.navigation.destination.WeatherDestinations
 import kz.zeme.weather.core.snackbar.LocalWeatherSnackBarHostState
 import kz.zeme.weather.core.snackbar.WeatherSnackBarHost
 import kz.zeme.weather.presentation.home.components.AverageBlock
+import kz.zeme.weather.presentation.home.components.BottomNavigationBar
 import kz.zeme.weather.presentation.home.components.DailyForecastBlock
 import kz.zeme.weather.presentation.home.components.FeelsLikeBlock
 import kz.zeme.weather.presentation.home.components.HeaderBlock
@@ -52,6 +55,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
+    navController: NavHostController,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val stateWrapper by viewModel.states.collectAsStateWithLifecycle()
@@ -62,6 +66,7 @@ fun HomeScreen(
             LoadingScreen(isLoading = currentState.data.isLoading) {
                 HomeScreenContent(
                     uiState = currentState.data,
+                    navController = navController,
                     onIntent = viewModel::acceptIntent
                 )
             }
@@ -90,6 +95,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     uiState: HomeState,
+    navController: NavHostController,
     onIntent: (HomeIntent) -> Unit
 ) {
     val weatherData = uiState.weatherData
@@ -205,6 +211,12 @@ private fun HomeScreenContent(
                     }
                 }
             }
+
+            BottomNavigationBar(
+                onMapCLick = {  },
+                onListClick = { navController.navigate(WeatherDestinations.LocationsScreen) },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }

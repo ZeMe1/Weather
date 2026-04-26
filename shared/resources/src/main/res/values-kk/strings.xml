@@ -27,6 +27,7 @@
     <string name="uv_index">УК-индекс</string>
     <string name="hpa">гПа</string>
 
+    <string name="weather">Ауа райы</string>
     <string name="current_location">Ағымдағы орын</string>
     <string name="change_list">Тізімді өзгерту</string>
     <string name="notification">Хабарландырулар</string>
@@ -59,7 +60,10 @@
     <string name="forecast_for_eight_days">8 күндік болжам</string>
     <string name="meteo_map_data_detailed">Метеорологиялық және карта деректері туралы толығырақ</string>
     <string name="warn_about_problem">Мәселе туралы хабарлау</string>
+    <string name="celsius">Цельсий градусы</string>
+    <string name="fahrenheit">Фаренгейт градусы</string>
     <string name="on_for">-ға / -ге</string>
+    <string name="search_city_airport">Қаланы немесе әуежайды іздеу</string>
 
     <string name="below_avg_max">&lt;орташа тәуліктік максимумнан төмен</string>
     <string name="more_daily_max">&gt;орташа тәуліктік максимумнан жоғары</string>

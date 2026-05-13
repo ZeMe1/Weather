@@ -1,7 +1,5 @@
 package kz.zeme.weather.core.commonComponents.commonWidgets
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +29,7 @@ import kz.zeme.weather.shared.resources.constants.SymbolConstants
 @Composable
 fun WeatherSummaryCard(
     weatherSummary: WeatherSummary,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isMain: Boolean = false,
 ) {
@@ -40,7 +39,8 @@ fun WeatherSummaryCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = WeatherTheme.shapes.card
+        shape = WeatherTheme.shapes.card,
+        onClick = onClick
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
 
@@ -149,19 +149,6 @@ private fun LastFetchedTimeLabel(
         text = time,
         style = WeatherTheme.typography.weight500Size12LineHeight12,
         color = WeatherTheme.colors.textCyan,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun CardBackground(
-    @DrawableRes backgroundRes: Int,
-    modifier: Modifier = Modifier
-) {
-    Image(
-        painter = painterResource(backgroundRes),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
         modifier = modifier
     )
 }

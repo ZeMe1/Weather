@@ -6,6 +6,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { HomeViewModel(getWeatherUseCase = get()) }
-    viewModel { LocationsViewModel() }
+    viewModel { HomeViewModel(getWeatherUseCase = get(), temperaturePrefs = get(), savedStateHandle = get()) }
+    viewModel { LocationsViewModel(getGeocodingUseCase = get(), getAllLocationsWeatherUseCase = get(), temperaturePrefs = get()) }
 }

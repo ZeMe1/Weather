@@ -16,14 +16,17 @@ sealed interface WeatherDestinations : Destination, TransitionAnimation.SlideFad
     data object Graph : WeatherDestinations
 
     @Serializable
-    data object Main : WeatherDestinations
+    data class Main(
+        val lat: Double?,
+        val lon: Double?
+    ) : WeatherDestinations
 
     @Serializable
     data object LocationsScreen : WeatherDestinations
 }
 
 fun NavGraphBuilder.weatherGraph(  navController: NavHostController) {
-    navigation(startDestination = WeatherDestinations.Main::class, route = WeatherDestinations.Graph::class) {
+    navigation(startDestination = WeatherDestinations.Main(lat = null, lon = null), route = WeatherDestinations.Graph::class) {
         screen<WeatherDestinations.Main> { backStackEntry, arg ->
             HomeScreen(navController = navController)
         }

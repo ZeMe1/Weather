@@ -57,6 +57,9 @@
     <string name="uv_desc_very_high">Старайтесь не находиться на солнце.</string>
     <string name="uv_desc_extreme">Не выходите на солнце</string>
 
+    <string name="cancel">Отмена</string>
+    <string name="search_no_result">К сожалению ничего не найдено.</string>
+
     <string name="forecast_for_eight_days">Прогноз на 8 дней</string>
     <string name="meteo_map_data_detailed">Подробнее о метеорологических и картографических данных</string>
     <string name="warn_about_problem">Сообщить о проблеме</string>
@@ -79,6 +82,9 @@
     <string name="gps_disabled">GPS выключен</string>
     <string name="permission_denied">Доступ запрещен</string>
     <string name="location_unavailable">Местоположение недоступно</string>
+
+    <string name="temp_unit_changed_celsius">Температура теперь отображается в градусах Цельсия</string>
+    <string name="temp_unit_changed_fahrenheit">Температура теперь отображается в градусах Фаренгейта</string>
     
     <string name="hardcode_work">Работа</string>
 </resources>

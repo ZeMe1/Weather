@@ -14,6 +14,7 @@ import kz.zeme.weather.core.repository.LocationException
 import kz.zeme.weather.core.repository.NetworkException
 import kz.zeme.weather.core.repository.apiCall
 import kz.zeme.weather.data.local.dao.WeatherDao
+import kz.zeme.weather.data.local.entity.WeatherEntity
 import kz.zeme.weather.data.local.mapper.WeatherMapperLocal
 import kz.zeme.weather.data.remote.api.WeatherApi
 import kz.zeme.weather.data.remote.mapper.DailyForecastMapper
@@ -41,8 +42,10 @@ class WeatherRepositoryImpl(
 ) : BaseRepository, WeatherRepository {
 
     override fun getWeather(coordinates: Coordinates): Flow<Result<Weather>> = channelFlow {
+        val locationId = WeatherEntity.buildId(coordinates.latitude, coordinates.longitude)
+
         launch {
-            dao.getWeatherForecast()
+            dao.getWeatherForecast(locationId)
                 .filterNotNull()
                 .map { Result.success(weatherMapperLocal.map(it)) }
                 .collect { send(it) }
@@ -52,32 +55,45 @@ class WeatherRepositoryImpl(
             send(Result.failure(NetworkException.NoInternet))
             return@channelFlow
         } else {
-            val refreshResult = refreshNetwork(coordinates)
-
-            refreshResult.onFailure { exception ->
+            refreshNetwork(coordinates, locationId).onFailure { exception ->
                 send(Result.failure(exception))
             }
         }
     }.flowOn(Dispatchers.Default)
 
-    override fun getCachedWeather(): Flow<Weather?> {
-        return dao.getWeatherForecast().map { weatherDataEntity ->
-            weatherDataEntity?.let { weatherMapperLocal.map(it) }
-        }.flowOn(Dispatchers.IO)
+    override fun getCachedWeather(locationId: String): Flow<Weather?> {
+        return dao.getWeatherForecast(locationId)
+            .map { it?.let { weatherMapperLocal.map(it) } }
+            .flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getHistoryWeather(coordinates: Coordinates, timeStamp: Long): Result<HistoryWeather> =
-        apiCall {
-            val response = api.getHistoryWeather(
-                latitude = coordinates.latitude,
-                longitude = coordinates.longitude,
-                timeStamp = timeStamp
-            )
-            val data = response.data.first()
-            historyWeatherMapper.map(data)
-        }
+    override fun getAllCachedWeather(): Flow<List<Weather>> {
+        return dao.getAllWeatherForecasts()
+            .map { list -> list.map { weatherMapperLocal.map(it) } }
+            .flowOn(Dispatchers.IO)
+    }
 
-    private suspend fun refreshNetwork(coordinates: Coordinates): Result<Unit> {
+    override suspend fun deleteLocation(coordinates: Coordinates) {
+        val locationId = WeatherEntity.buildId(coordinates.latitude, coordinates.longitude)
+        dao.deleteLocation(locationId)
+    }
+
+    override suspend fun getHistoryWeather(
+        coordinates: Coordinates,
+        timeStamp: Long
+    ): Result<HistoryWeather> = apiCall {
+        val response = api.getHistoryWeather(
+            latitude = coordinates.latitude,
+            longitude = coordinates.longitude,
+            timeStamp = timeStamp
+        )
+        historyWeatherMapper.map(response.data.first())
+    }
+
+    private suspend fun refreshNetwork(
+        coordinates: Coordinates,
+        locationId: String
+    ): Result<Unit> {
         return try {
             coroutineScope {
                 val cityNameDeferred = async {
@@ -95,31 +111,28 @@ class WeatherRepositoryImpl(
                 }
 
                 val cityName = cityNameDeferred.await()
-                val responseResult = responseDeferred.await()
-
-                val response = responseResult.getOrThrow()
-
-                val mappedHourly = response.hourly.take(HOURS_IN_DAY).map { hourlyMapper.map(it) }
-                val mappedDaily = response.daily.map { dailyMapper.map(it) }
+                val response = responseDeferred.await().getOrThrow()
 
                 val source = WeatherSource(
                     weatherResponse = response,
-                    hourlyForecast = mappedHourly,
-                    dailyForecast = mappedDaily
+                    hourlyForecast = response.hourly.take(HOURS_IN_DAY).map { hourlyMapper.map(it) },
+                    dailyForecast = response.daily.map { dailyMapper.map(it) }
                 )
 
                 val weatherData = weatherMapper.map(source).copy(
-                    cityName = cityName ?: response.timeZone.substringAfterLast("/")
+                    id = locationId,
+                    cityName = cityName ?: response.timeZone
+                        .substringAfterLast("/")
                         .replace("_", " ")
                 )
 
-                val finalWeatherData = weatherMapperLocal.reverse(weatherData)
-
-                dao.upsertWeather(
-                    weather = finalWeatherData.weather,
-                    hourly = finalWeatherData.hourlyForecasts,
-                    daily = finalWeatherData.dailyForecasts
-                )
+                weatherMapperLocal.reverse(weatherData).let {
+                    dao.upsertWeather(
+                        weather = it.weather,
+                        hourly = it.hourlyForecasts,
+                        daily = it.dailyForecasts
+                    )
+                }
 
                 Result.success(Unit)
             }

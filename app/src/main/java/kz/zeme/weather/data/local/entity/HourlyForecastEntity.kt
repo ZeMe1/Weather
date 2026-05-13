@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
 )
 data class HourlyForecastEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "weather_id") val weatherId: Int = 0,
+    @ColumnInfo(name = "weather_id") val weatherId: String = "",
     val timeEpoch: Long,
     val temp: Int,
     val iconCode: String

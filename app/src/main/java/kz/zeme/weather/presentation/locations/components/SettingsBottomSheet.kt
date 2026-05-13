@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import kz.zeme.weather.core.commonComponents.bottomSheet.BaseBottomSheet
 import kz.zeme.weather.core.commonComponents.commonWidgets.CommonHorizontalDivider
+import kz.zeme.weather.core.preference.TemperatureUnit
 import kz.zeme.weather.presentation.locations.LocationsIntent
 import kz.zeme.weather.shared.resources.R
 import kz.zeme.weather.shared.resources.WeatherTheme
@@ -41,13 +42,10 @@ private fun SettingsBottomSheetContent(
             .padding(bottom = WeatherTheme.dimensions.mediumPadding),
         verticalArrangement = Arrangement.spacedBy(WeatherTheme.dimensions.mediumPadding)
     ) {
-        BottomSheetContentBlock(
-            firstRowIcon = R.drawable.ic_edit,
-            secondRowIcon = R.drawable.ic_bell,
-            firstRowText = R.string.change_list,
-            secondRowText = R.string.notification,
-            onFirstRowClick = {  },
-            onSecondRowClick = {  }
+        BottomSheetContentRow(
+            icon = R.drawable.ic_edit,
+            text = R.string.change_list,
+            onClick = {  }
         )
         CommonHorizontalDivider()
         BottomSheetContentBlock(
@@ -55,19 +53,13 @@ private fun SettingsBottomSheetContent(
             secondRowIcon = R.drawable.ic_fahrenheit,
             firstRowText = R.string.celsius,
             secondRowText = R.string.fahrenheit,
-            onFirstRowClick = {  },
-            onSecondRowClick = {  }
+            onFirstRowClick = { onIntent(LocationsIntent.SelectTemperatureUnit(TemperatureUnit.CELSIUS)) },
+            onSecondRowClick = { onIntent(LocationsIntent.SelectTemperatureUnit(TemperatureUnit.FAHRENHEIT)) }
         )
         CommonHorizontalDivider()
         BottomSheetContentRow(
             icon = R.drawable.ic_statistics,
             text = R.string.units,
-            onClick = {  }
-        )
-        CommonHorizontalDivider()
-        BottomSheetContentRow(
-            icon = R.drawable.ic_message,
-            text = R.string.warn_about_problem,
             onClick = {  }
         )
     }

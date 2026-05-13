@@ -57,6 +57,9 @@
     <string name="uv_desc_very_high">Try to stay out of the sun.</string>
     <string name="uv_desc_extreme">Avoid sun exposure</string>
 
+    <string name="cancel">Cancel</string>
+    <string name="search_no_result">No results found</string>
+
     <string name="forecast_for_eight_days">8-day forecast</string>
     <string name="meteo_map_data_detailed">Learn more about meteorological and map data</string>
     <string name="warn_about_problem">Report a problem</string>
@@ -80,6 +83,8 @@
     <string name="permission_denied">Permission denied</string>
     <string name="location_unavailable">Location unavailable</string>
 
+    <string name="temp_unit_changed_celsius">Temperature is now displayed in Celsius</string>
+    <string name="temp_unit_changed_fahrenheit">Temperature is now displayed in Fahrenheit</string>
 
     <string name="hardcode_work">Job</string>
 </resources>

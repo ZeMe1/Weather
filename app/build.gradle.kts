@@ -27,21 +27,60 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        val localProperties = Properties().apply { load(rootProject.file("local.properties").inputStream()) }
-        val weatherApiKey = localProperties.getProperty("WEATHER_API_KEY", "")
-        buildConfigField("String", "WEATHER_API_KEY", "\"$weatherApiKey\"")
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            load(file.inputStream())
+        }
+    }
+
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+
+            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/\"")
+            val apiKey = localProperties.getProperty("DEV_WEATHER_API_KEY", "")
+            buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
+        }
+
+        create("qa") {
+            dimension = "environment"
+            applicationIdSuffix = ".qa"
+            versionNameSuffix = "-qa"
+
+            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/\"")
+            val apiKey = localProperties.getProperty("QA_WEATHER_API_KEY", "")
+            buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
+        }
+
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/\"")
+            val apiKey = localProperties.getProperty("PROD_WEATHER_API_KEY", "")
+            buildConfigField("String", "WEATHER_API_KEY", "\"$apiKey\"")
+        }
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

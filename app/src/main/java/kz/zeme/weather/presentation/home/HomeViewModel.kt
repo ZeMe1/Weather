@@ -1,9 +1,14 @@
 package kz.zeme.weather.presentation.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kz.zeme.weather.core.architecture.BaseViewModel
@@ -16,10 +21,14 @@ import kz.zeme.weather.core.architecture.State.Success
 import kz.zeme.weather.core.architecture.StateHolder.Companion.generateOrElse
 import kz.zeme.weather.core.architecture.getOrNull
 import kz.zeme.weather.core.extensions.UiText
+import kz.zeme.weather.core.extensions.ensureUnit
 import kz.zeme.weather.core.extensions.toDayLabel
 import kz.zeme.weather.core.extensions.toErrorLabel
 import kz.zeme.weather.core.extensions.toHourLabel
 import kz.zeme.weather.core.extensions.toHourMinuteLabel
+import kz.zeme.weather.core.navigation.destination.WeatherDestinations
+import kz.zeme.weather.core.preference.TemperatureUnitPreferences
+import kz.zeme.weather.core.repository.LocationException
 import kz.zeme.weather.domain.model.DailyForecastUiItem
 import kz.zeme.weather.domain.model.HourlyForecastUiItem
 import kz.zeme.weather.domain.model.Weather
@@ -29,12 +38,18 @@ import kz.zeme.weather.shared.resources.R
 private typealias HomeMiddlewareType = DefaultMiddleware<HomeIntent, HomeAction, State<HomeState>, HomeMsg, HomeLabel>
 
 class HomeViewModel(
-    private val getWeatherUseCase: GetWeatherUseCase
+    private val getWeatherUseCase: GetWeatherUseCase,
+    private val temperaturePrefs: TemperatureUnitPreferences,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<State<HomeState>, HomeIntent, HomeAction, HomeMsg, HomeLabel>() {
 
     override val bootstrapper: Bootstrapper<HomeAction> = HomeBootstrapper()
     override val middleware: HomeMiddlewareType = HomeMiddleware()
     override val reducer: Reducer<State<HomeState>, HomeMsg> = HomeReducer()
+
+    private val args = savedStateHandle.toRoute<WeatherDestinations.Main>()
+    private val lat = args.lat
+    private val lon = args.lon
 
     private val _states = MutableStateFlow<State<HomeState>>(Success(HomeState()))
     override val states: StateFlow<State<HomeState>> = _states
@@ -61,6 +76,9 @@ class HomeViewModel(
     }
 
     private inner class HomeMiddleware : HomeMiddlewareType(state = { state }, scope = viewModelScope) {
+
+        private val rawWeatherResult = MutableStateFlow<Result<Weather>?>(null)
+
         override fun handleIntent(intent: HomeIntent, state: () -> State<HomeState>) {
             when (intent) {
                 HomeIntent.RefreshWeather -> observeWeatherData(isRefresh = true)
@@ -69,7 +87,38 @@ class HomeViewModel(
 
         override fun handleAction(action: HomeAction, getState: () -> State<HomeState>) {
             when (action) {
-                HomeAction.LoadScreen -> observeWeatherData()
+                HomeAction.LoadScreen -> {
+                    observeWeatherData()
+                    observeUnitChanges()
+                }
+            }
+        }
+
+        private fun resolveWeatherFlow(): Flow<Result<Weather>> =
+            if (lat != null && lon != null) {
+                getWeatherUseCase.invoke(lat, lon)
+            } else {
+                getWeatherUseCase.invoke()
+            }
+
+        private fun observeUnitChanges() {
+            scope.launch {
+                combine(
+                    rawWeatherResult.filterNotNull(),
+                    temperaturePrefs.unitFlow
+                ) { result, unit ->
+                    result.map { it.ensureUnit(unit) }
+                }.collect { result ->
+                    result.onSuccess { weatherData ->
+                        dispatch(
+                            HomeMsg.WeatherDataLoaded(
+                                weather = weatherData,
+                                hourlyForecastItems = createHourlyUiItems(weatherData),
+                                dailyForecastItems = createDailyUiItems(weatherData)
+                            )
+                        )
+                    }
+                }
             }
         }
 
@@ -77,28 +126,22 @@ class HomeViewModel(
             scope.launch(Dispatchers.IO) {
                 if (isRefresh) dispatch(HomeMsg.Refreshing(true))
 
-                getWeatherUseCase().collect { result ->
-                    result
-                        .onSuccess { weatherData ->
-                            val hasData = state.getOrNull()?.weatherData != null
-                            if (!hasData && !isRefresh) dispatch(HomeMsg.Loading(true))
-
-                            val hourlyItems = createHourlyUiItems(weatherData)
-                            val dailyItems = createDailyUiItems(weatherData)
-
-                            dispatch(
-                                HomeMsg.WeatherDataLoaded(
-                                    weather = weatherData,
-                                    hourlyForecastItems = hourlyItems,
-                                    dailyForecastItems = dailyItems
-                                )
-                            )
-                        }
-                        .onFailure { error ->
+                resolveWeatherFlow().collect { result ->
+                    result.onSuccess {
+                        val hasData = state.getOrNull()?.weatherData != null
+                        if (!hasData && !isRefresh) dispatch(HomeMsg.Loading(true))
+                        rawWeatherResult.value = result
+                    }.onFailure { error ->
+                        if (error is LocationException.PermissionDenied) {
+                            if (isRefresh) dispatch(HomeMsg.Refreshing(false))
+                            else dispatch(HomeMsg.Loading(false))
+                            publish(HomeLabel.RequestLocationPermission)
+                        } else {
                             publish(HomeLabel.ShowError(error.toErrorLabel()))
                             dispatch(HomeMsg.Loading(false))
                             if (isRefresh) dispatch(HomeMsg.Refreshing(false))
                         }
+                    }
                 }
             }
         }

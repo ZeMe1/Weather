@@ -57,4 +57,5 @@ sealed interface HomeMsg {
 
 sealed interface HomeLabel {
     data class ShowError(val message: Int) : HomeLabel
+    data object RequestLocationPermission : HomeLabel
 }

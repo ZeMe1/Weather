@@ -2,18 +2,22 @@ package kz.zeme.weather.data.local.mapper
 
 import kotlinx.datetime.Instant
 import kz.zeme.weather.core.mapper.BiMapper
+import kz.zeme.weather.core.preference.TemperatureUnit
+import kz.zeme.weather.core.preference.TemperatureUnitPreferences
 import kz.zeme.weather.data.local.entity.WeatherEntity
 import kz.zeme.weather.data.local.entity.WeatherForecastData
 import kz.zeme.weather.domain.model.Weather
 
 class WeatherMapperLocal(
     private val hourlyMapper: HourlyForecastMapperLocal,
-    private val dailyMapper: DailyForecastMapperLocal
+    private val dailyMapper: DailyForecastMapperLocal,
+    private val temperaturePrefs: TemperatureUnitPreferences,
 ) : BiMapper<WeatherForecastData, Weather> {
     override fun reverse(source: Weather): WeatherForecastData {
         return WeatherForecastData(
             weather = WeatherEntity(
-                id = 0,
+                id = source.id,
+                unit = source.unit.name,
                 cityName = source.cityName,
                 timezone = source.timezone,
                 currentTemp = source.currentTemp,
@@ -39,6 +43,8 @@ class WeatherMapperLocal(
 
     override fun map(source: WeatherForecastData): Weather {
         return Weather(
+            id = source.weather.id,
+            unit = TemperatureUnit.valueOf(source.weather.unit),
             cityName = source.weather.cityName,
             timezone = source.weather.timezone,
             currentTemp = source.weather.currentTemp,

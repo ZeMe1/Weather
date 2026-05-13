@@ -1,8 +1,11 @@
 package kz.zeme.weather.domain.model
 
 import kotlinx.datetime.Instant
+import kz.zeme.weather.core.preference.TemperatureUnit
 
 data class Weather(
+    val id: String = "",
+    val unit: TemperatureUnit,
     val cityName: String,
     val timezone: String,
     val currentTemp: Int,

@@ -18,7 +18,7 @@ import androidx.room.PrimaryKey
 )
 data class DailyForecastEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "weather_id") val weatherId: Int = 0,
+    @ColumnInfo(name = "weather_id") val weatherId: String = "",
     val timeEpoch: Long,
     val minTemp: Int,
     val maxTemp: Int,

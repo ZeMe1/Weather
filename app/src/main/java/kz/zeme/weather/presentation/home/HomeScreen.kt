@@ -1,5 +1,8 @@
 package kz.zeme.weather.presentation.home
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,6 +64,16 @@ fun HomeScreen(
     val stateWrapper by viewModel.states.collectAsStateWithLifecycle()
     val snackBarHostState = LocalWeatherSnackBarHostState.current
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        if (granted) {
+            viewModel.acceptIntent(HomeIntent.RefreshWeather)
+        }
+    }
+
     when (val currentState = stateWrapper) {
         is Success -> {
             LoadingScreen(isLoading = currentState.data.isLoading) {
@@ -71,20 +84,25 @@ fun HomeScreen(
                 )
             }
         }
-
-        else -> {
-
-        }
+        else -> {}
     }
-    LaunchedEffectLifecycle (key = viewModel, lifecycleState = Lifecycle.State.STARTED) {
+
+    LaunchedEffectLifecycle(key = viewModel, lifecycleState = Lifecycle.State.STARTED) {
         viewModel.labels.collectLatest { label ->
             when (label) {
                 is HomeLabel.ShowError -> snackBarHostState.show(
                     messageRes = label.message
                 )
+                HomeLabel.RequestLocationPermission -> permissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
             }
         }
     }
+
     WeatherSnackBarHost(
         hostState = snackBarHostState,
         modifier = Modifier.padding(top = WeatherTheme.dimensions.extraLargePadding)

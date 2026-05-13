@@ -9,10 +9,9 @@ import kz.zeme.weather.data.local.entity.DailyForecastEntity
 import kz.zeme.weather.data.local.entity.HourlyForecastEntity
 import kz.zeme.weather.data.local.entity.WeatherEntity
 
-
 @Database(
     entities = [WeatherEntity::class, HourlyForecastEntity::class, DailyForecastEntity::class],
-    version = 1,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(InstantConverter::class)
